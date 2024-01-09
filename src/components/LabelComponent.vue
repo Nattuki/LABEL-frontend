@@ -1,15 +1,22 @@
 <template>
     <div class="container">
-        <button @click="$emit('seek', TimeToSeek)">
-
+        <button @click="$emit('seek', [TimeToSeek])">
+            {{ props.text }}
         </button>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 
-const TimeToSeek = ref(10);
+const props = withDefaults(
+    defineProps<{
+        text?: string
+        TimeToSeek: number
+    }>(),
+    {
+        text: 'seek!'
+    }
+)
 
 </script>
 

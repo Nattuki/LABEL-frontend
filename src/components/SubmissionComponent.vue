@@ -1,6 +1,6 @@
 <template>
     <div :class="$style.container">
-        <div class="$style.iframeWrapper">
+        <div :class="$style.iframeWrapper">
             <iframe 
               ref="embed" 
               :src="url"
@@ -11,10 +11,20 @@
               allow="clipboard-write; encrypted-media">
             </iframe>
         </div>
-        <div class="$style.labelsWrapper">
-            <label-component @seek="seekTo" class="$style.label" />
+        <div :class="$style.labelsWrapper">
+            <label-component 
+              @seek="seekTo" 
+              :class="$style.label"
+              :text="'seek1'"
+              :TimeToSeek="10"
+            />
+            <label-component 
+              @seek="seekTo" 
+              :class="$style.label"
+              :text="'seek2'"
+              :TimeToSeek="20"
+            />
         </div>
-        <button class="$style.addLabelButton"></button>
     </div>
 </template>
 
@@ -23,15 +33,18 @@ import { ref } from 'vue'
 import LabelComponent from './LabelComponent.vue';
 
 const embed = ref<HTMLIFrameElement | null>(null)
+const url = 'https://www.youtube.com/embed/ef41Q2-DQ2Q?enablejsapi=1'
 
-const seekTo = function (TimeToSeek: number) {
-    const target = embed.value
-    target?.contentWindow?.postMessage(`{"event":"command","func":"seekTo","args":${TimeToSeek}}`, '*')
+const seekTo = (TimeToSeek: number[]) => {
+    const TimeToSeekJSON = TimeToSeek !== undefined ? JSON.stringify(TimeToSeek) : '""'
+    embed.value?.contentWindow?.postMessage(`{"event":"command","func":"seekTo","args":${TimeToSeekJSON}}`, '*')
 }
 
 </script>
 
 <style lang="scss" module>
-
+.container{
+    border:1px solid red;
+}
 
 </style>
